@@ -34,6 +34,14 @@ export default function Sidebar() {
         {open ? <X size={18} /> : <Menu size={18} />}
       </button>
       {open ? (
+        <div
+          role="presentation"
+          aria-hidden
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-20 hidden bg-black/40 backdrop-blur-sm md:block lg:hidden"
+        />
+      ) : null}
+      {open ? (
         <aside className="fixed left-0 top-0 z-30 hidden h-full w-64 border-r border-slate-200 bg-white p-5 shadow-xl dark:border-slate-700 dark:bg-slate-800 md:block lg:hidden">
           <div className="mb-8 flex items-center gap-2 text-xl font-bold text-indigo-500"><BarChart2 size={20} /> FinSight</div>
           <nav className="space-y-1">

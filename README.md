@@ -67,10 +67,10 @@ src/
 
 ## Screenshots
 
-- Dashboard (dark mode) - _placeholder_
-- Transactions page with filters - _placeholder_
-- Insights page - _placeholder_
-- Mobile bottom navigation - _placeholder_
+- `![Dashboard Dark Mode](/src/screenshots/dashboard-dark.png)`
+- `![Transactions with Filters](/src/screenshots/transactions-filtered.png)`
+- `![Insights Page](/src/screenshots/insights.png)`
+- `![Mobile View](/src/screenshots/mobile(iPhone-14-Plus).png)`
 
 ## Assignment Notes
 

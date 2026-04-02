@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import EmptyState from "../ui/EmptyState";
 import { Pencil, Trash2 } from "lucide-react";
@@ -5,6 +6,8 @@ import { formatDate, formatINR } from "../../utils/formatUtils";
 import Badge from "../ui/Badge";
 
 export default function TransactionTable({ transactions, isAdmin, onSort, onEdit, onDelete, onReset }) {
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+
   if (!transactions.length) return <EmptyState message="No transactions found for selected filters." onReset={onReset} />;
 
   return (
@@ -37,9 +40,31 @@ export default function TransactionTable({ transactions, isAdmin, onSort, onEdit
                 <td className={`p-3 font-semibold ${txn.type === "income" ? "text-emerald-500" : "text-rose-500"}`}>{txn.type === "income" ? "+" : "-"}{formatINR(txn.amount)}</td>
                 {isAdmin ? (
                   <td className="p-3">
-                    <div className="flex gap-2">
-                      <button onClick={() => onEdit(txn)} className="rounded p-1 hover:bg-slate-100 dark:hover:bg-slate-700"><Pencil size={16} /></button>
-                      <button onClick={() => onDelete(txn.id)} className="rounded p-1 text-rose-500 hover:bg-rose-500/10"><Trash2 size={16} /></button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button type="button" onClick={() => onEdit(txn)} className="rounded p-1 hover:bg-slate-100 dark:hover:bg-slate-700"><Pencil size={16} /></button>
+                      {confirmDeleteId === txn.id ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onDelete(txn.id);
+                              setConfirmDeleteId(null);
+                            }}
+                            className="rounded px-2 py-1 text-xs font-medium bg-rose-500 text-white"
+                          >
+                            Confirm
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteId(null)}
+                            className="rounded border border-slate-300 px-2 py-1 text-xs text-slate-500 dark:border-slate-600 dark:text-slate-400"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <button type="button" onClick={() => setConfirmDeleteId(txn.id)} className="rounded p-1 text-rose-500 hover:bg-rose-500/10"><Trash2 size={16} /></button>
+                      )}
                     </div>
                   </td>
                 ) : null}

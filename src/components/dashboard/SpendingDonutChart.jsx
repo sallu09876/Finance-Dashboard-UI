@@ -27,7 +27,7 @@ export default function SpendingDonutChart({ data }) {
                 <Cell key={entry.category} fill={colors[index % colors.length]} />
               ))}
             </Pie>
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip formatter={(value) => [formatINR(value), ""]} content={<CustomTooltip />} />
           </PieChart>
         </ResponsiveContainer>
       </div>

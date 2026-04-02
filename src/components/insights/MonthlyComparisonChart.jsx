@@ -7,7 +7,9 @@ function CustomTooltip({ active, payload, label }) {
   return (
     <div className="rounded-lg bg-slate-800 px-3 py-2 text-sm text-white shadow-lg">
       <p>{label}</p>
-      <p>{formatINR(payload[0].value)}</p>
+      {payload.map((p) => (
+        <p key={String(p.dataKey)}>{p.name}: {formatINR(p.value)}</p>
+      ))}
     </div>
   );
 }
@@ -20,8 +22,8 @@ export default function MonthlyComparisonChart({ data }) {
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
             <XAxis dataKey="month" />
-            <YAxis tickFormatter={(v) => `${Math.round(v / 1000)}k`} />
-            <Tooltip content={<CustomTooltip />} />
+            <YAxis tickFormatter={formatINR} />
+            <Tooltip formatter={(value) => [formatINR(value), ""]} content={<CustomTooltip />} />
             <Bar dataKey="income" fill="#10b981" radius={[6, 6, 0, 0]} />
             <Bar dataKey="expenses" fill="#f43f5e" radius={[6, 6, 0, 0]} />
           </BarChart>

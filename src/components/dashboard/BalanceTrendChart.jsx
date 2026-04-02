@@ -7,7 +7,9 @@ function CustomTooltip({ active, payload, label }) {
   return (
     <div className="rounded-lg bg-slate-800 px-3 py-2 text-sm text-white shadow-lg">
       <p>{label}</p>
-      <p>{formatINR(payload[0].value)}</p>
+      {payload.map((p) => (
+        <p key={String(p.dataKey)}>{formatINR(p.value)}</p>
+      ))}
     </div>
   );
 }
@@ -32,8 +34,8 @@ export default function BalanceTrendChart({ data }) {
               </linearGradient>
             </defs>
             <XAxis dataKey="month" />
-            <YAxis tickFormatter={(v) => `${Math.round(v / 1000)}k`} />
-            <Tooltip content={<CustomTooltip />} />
+            <YAxis tickFormatter={formatINR} />
+            <Tooltip formatter={(value) => [formatINR(value), ""]} content={<CustomTooltip />} />
             <Area type="monotone" dataKey="balance" stroke="#6366f1" fill="url(#bal)" />
           </AreaChart>
         </ResponsiveContainer>

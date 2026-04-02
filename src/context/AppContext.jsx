@@ -14,6 +14,7 @@ const initialState = {
   transactions: mockTransactions,
   filters: defaultFilters,
   role: "viewer",
+  toasts: [],
   profile: {
     name: "Sarthak Rao",
     email: "sarthak.rao@example.com",
@@ -25,22 +26,48 @@ const storageKey = "finsight_app_state_v2";
 /** Avatar stored separately so the main JSON blob stays small and under localStorage quota. */
 const avatarStorageKey = "finsight_profile_avatar_v1";
 
+function pushToast(state, message, type = "success") {
+  return {
+    ...state,
+    toasts: [...state.toasts, { id: Date.now(), message, type }]
+  };
+}
+
 function appReducer(state, action) {
   switch (action.type) {
     case "ADD_TRANSACTION":
       if (state.role !== "admin") return state;
-      return { ...state, transactions: [action.payload, ...state.transactions] };
+      return pushToast(
+        { ...state, transactions: [action.payload, ...state.transactions] },
+        "Transaction added",
+        "success"
+      );
     case "EDIT_TRANSACTION":
       if (state.role !== "admin") return state;
-      return {
-        ...state,
-        transactions: state.transactions.map((txn) =>
-          txn.id === action.payload.id ? { ...txn, ...action.payload } : txn
-        )
-      };
+      return pushToast(
+        {
+          ...state,
+          transactions: state.transactions.map((txn) =>
+            txn.id === action.payload.id ? { ...txn, ...action.payload } : txn
+          )
+        },
+        "Transaction updated",
+        "success"
+      );
     case "DELETE_TRANSACTION":
       if (state.role !== "admin") return state;
-      return { ...state, transactions: state.transactions.filter((txn) => txn.id !== action.payload) };
+      return pushToast(
+        { ...state, transactions: state.transactions.filter((txn) => txn.id !== action.payload) },
+        "Transaction deleted",
+        "success"
+      );
+    case "ADD_TOAST":
+      return {
+        ...state,
+        toasts: [...state.toasts, { id: Date.now(), message: action.payload.message, type: action.payload.type ?? "success" }]
+      };
+    case "REMOVE_TOAST":
+      return { ...state, toasts: state.toasts.filter((t) => t.id !== action.payload) };
     case "SET_FILTER":
       return { ...state, filters: { ...state.filters, ...action.payload } };
     case "RESET_FILTERS":
@@ -78,6 +105,7 @@ export function AppProvider({ children }) {
       return {
         ...baseState,
         ...parsed,
+        toasts: [],
         filters: { ...defaultFilters, ...(parsed.filters || {}) },
         profile: { ...mergedProfile, avatar }
       };
@@ -88,7 +116,7 @@ export function AppProvider({ children }) {
 
   useEffect(() => {
     try {
-      const { profile, ...rest } = state;
+      const { profile, toasts, ...rest } = state;
       const { avatar, ...profileWithoutAvatar } = profile;
       localStorage.setItem(
         storageKey,
@@ -111,4 +139,8 @@ export function useAppContext() {
   const context = useContext(AppContext);
   if (!context) throw new Error("useAppContext must be used within AppProvider");
   return context;
+}
+
+export function toast(dispatch, message, type = "success") {
+  dispatch({ type: "ADD_TOAST", payload: { message, type } });
 }

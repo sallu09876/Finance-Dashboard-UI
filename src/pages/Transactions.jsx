@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Download, Plus } from "lucide-react";
 import TransactionFilters from "../components/transactions/TransactionFilters";
 import TransactionModal from "../components/transactions/TransactionModal";
 import TransactionTable from "../components/transactions/TransactionTable";
-import { useAppContext } from "../context/AppContext";
+import { toast, useAppContext } from "../context/AppContext";
 import { transactionCategories } from "../data/mockData";
 import { exportToCSV, exportToJSON } from "../utils/exportUtils";
 
@@ -12,7 +12,19 @@ export default function Transactions() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [exportOpen, setExportOpen] = useState(false);
+  const exportDropdownRef = useRef(null);
   const isAdmin = state.role === "admin";
+
+  useEffect(() => {
+    if (!exportOpen) return;
+    const onMouseDown = (e) => {
+      if (exportDropdownRef.current && !exportDropdownRef.current.contains(e.target)) {
+        setExportOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
+  }, [exportOpen]);
 
   const filtered = useMemo(() => {
     let list = [...state.transactions];
@@ -36,12 +48,32 @@ export default function Transactions() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-xl font-semibold">All Transactions</h2>
         <div className="flex items-center gap-2">
-          <div className="relative">
+          <div className="relative" ref={exportDropdownRef}>
             <button onClick={() => setExportOpen((p) => !p)} className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm dark:border-slate-600"><Download size={16} /> Export</button>
             {exportOpen ? (
               <div className="absolute right-0 top-11 z-10 w-44 rounded-lg border border-slate-200 bg-white p-1 shadow dark:border-slate-700 dark:bg-slate-800">
-                <button onClick={() => exportToCSV(filtered)} className="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">Export as CSV</button>
-                <button onClick={() => exportToJSON(filtered)} className="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700">Export as JSON</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    exportToCSV(filtered);
+                    toast(dispatch, "Exported as CSV", "success");
+                    setExportOpen(false);
+                  }}
+                  className="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700"
+                >
+                  Export as CSV
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    exportToJSON(filtered);
+                    toast(dispatch, "Exported as JSON", "success");
+                    setExportOpen(false);
+                  }}
+                  className="block w-full rounded px-3 py-2 text-left text-sm hover:bg-slate-100 dark:hover:bg-slate-700"
+                >
+                  Export as JSON
+                </button>
               </div>
             ) : null}
           </div>
