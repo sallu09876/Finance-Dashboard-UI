@@ -67,10 +67,21 @@ src/
 
 ## Screenshots
 
-- `![Dashboard Dark Mode](/src/screenshots/dashboard-dark.png)`
-- `![Transactions with Filters](/src/screenshots/transactions-filtered.png)`
-- `![Insights Page](/src/screenshots/insights.png)`
-- `![Mobile View](/src/screenshots/mobile(iPhone-14-Plus).png)`
+### Dashboard (dark mode)
+
+<img src="./src/screenshots/dashboard-dark.png" alt="FinSight dashboard in dark mode" width="960" />
+
+### Transactions with filters
+
+<img src="./src/screenshots/transactions-filtered.png" alt="Transactions list with filters applied" width="960" />
+
+### Insights
+
+<img src="./src/screenshots/insights.png" alt="Insights page with charts" width="960" />
+
+### Mobile layout
+
+<img src="./src/screenshots/mobile%28iPhone-14-Plus%29.png" alt="FinSight on mobile (iPhone 14 Plus viewport)" width="420" />
 
 ## Assignment Notes
 
