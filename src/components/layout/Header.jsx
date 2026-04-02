@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import RoleToggle from "../ui/RoleToggle";
 import ThemeToggle from "../ui/ThemeToggle";
+import ProfileMenu from "./ProfileMenu";
 
 const titles = { "/": "Dashboard", "/transactions": "Transactions", "/insights": "Insights" };
 
@@ -13,7 +14,7 @@ export default function Header() {
       <div className="flex items-center gap-3">
         <ThemeToggle />
         <RoleToggle />
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-500 font-semibold text-white">SR</div>
+        <ProfileMenu />
       </div>
     </header>
   );

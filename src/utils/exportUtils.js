@@ -13,8 +13,16 @@ const download = (blob, extension) => {
 };
 
 export const exportToCSV = (transactions) => {
-  const csv = Papa.unparse(transactions);
-  download(new Blob([csv], { type: "text/csv;charset=utf-8;" }), "csv");
+  const rows = transactions.map((txn) => ({
+    Date: `'${format(new Date(txn.date), "yyyy-MM-dd")}`,
+    Description: txn.description,
+    Category: txn.category,
+    Type: txn.type,
+    Amount: txn.amount
+  }));
+  const csv = Papa.unparse(rows);
+  const csvWithBom = `\uFEFF${csv}`;
+  download(new Blob([csvWithBom], { type: "text/csv;charset=utf-8;" }), "csv");
 };
 
 export const exportToJSON = (transactions) => {

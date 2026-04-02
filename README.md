@@ -26,6 +26,7 @@ It includes role-based actions, advanced filters, responsive charts, and dark/li
 - Insights page with monthly comparison and category trends
 - CSV and JSON export for currently filtered transactions
 - Dark/light theme toggle across all pages
+- Editable profile panel with avatar upload and local persistence
 - Responsive layout with sidebar (desktop) and bottom tabs (mobile)
 
 ## Setup Instructions
@@ -58,9 +59,11 @@ src/
 
 - Global app state is managed in `AppContext` and updated through reducer actions.
 - Theme state is isolated in `ThemeContext` and applies `dark` mode at root HTML level.
+- Theme follows system preference on first load and stays persistent after user toggle.
 - Role-based UI hides all mutating controls in Viewer mode.
 - Chart and insight values are fully derived from local mock transaction data.
 - Export actions only include currently visible/filtered transaction rows.
+- CSV date export is Excel-safe (keeps dates readable when opened in spreadsheet apps).
 
 ## Screenshots
 

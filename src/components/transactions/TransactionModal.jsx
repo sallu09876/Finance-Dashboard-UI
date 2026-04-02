@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { transactionCategories } from "../../data/mockData";
 import Modal from "../ui/Modal";
 
@@ -12,10 +12,6 @@ export default function TransactionModal({ open, onClose, onSave, initial }) {
     date: new Date().toISOString().split("T")[0]
   };
   const [formState, setFormState] = useState(defaultValues);
-
-  useEffect(() => {
-    setFormState(defaultValues);
-  }, [initial, open]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

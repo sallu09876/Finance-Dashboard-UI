@@ -13,10 +13,17 @@ const defaultFilters = {
 const initialState = {
   transactions: mockTransactions,
   filters: defaultFilters,
-  role: "viewer"
+  role: "viewer",
+  profile: {
+    name: "Sarthak Rao",
+    email: "sarthak.rao@example.com",
+    avatar: null
+  }
 };
 
-const storageKey = "finsight_app_state_v1";
+const storageKey = "finsight_app_state_v2";
+/** Avatar stored separately so the main JSON blob stays small and under localStorage quota. */
+const avatarStorageKey = "finsight_profile_avatar_v1";
 
 function appReducer(state, action) {
   switch (action.type) {
@@ -40,6 +47,8 @@ function appReducer(state, action) {
       return { ...state, filters: defaultFilters };
     case "SET_ROLE":
       return { ...state, role: action.payload };
+    case "UPDATE_PROFILE":
+      return { ...state, profile: { ...state.profile, ...action.payload } };
     default:
       return state;
   }
@@ -51,14 +60,48 @@ export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(appReducer, initialState, (baseState) => {
     try {
       const savedState = localStorage.getItem(storageKey);
-      return savedState ? JSON.parse(savedState) : baseState;
+      let avatarFromDedicatedKey = null;
+      try {
+        avatarFromDedicatedKey = localStorage.getItem(avatarStorageKey);
+      } catch {
+        /* ignore */
+      }
+      if (!savedState) {
+        return avatarFromDedicatedKey
+          ? { ...baseState, profile: { ...baseState.profile, avatar: avatarFromDedicatedKey } }
+          : baseState;
+      }
+      const parsed = JSON.parse(savedState);
+      const mergedProfile = { ...baseState.profile, ...(parsed.profile || {}) };
+      const avatar =
+        avatarFromDedicatedKey ?? mergedProfile.avatar ?? baseState.profile.avatar ?? null;
+      return {
+        ...baseState,
+        ...parsed,
+        filters: { ...defaultFilters, ...(parsed.filters || {}) },
+        profile: { ...mergedProfile, avatar }
+      };
     } catch {
       return baseState;
     }
   });
 
   useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(state));
+    try {
+      const { profile, ...rest } = state;
+      const { avatar, ...profileWithoutAvatar } = profile;
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify({ ...rest, profile: profileWithoutAvatar })
+      );
+      if (avatar) {
+        localStorage.setItem(avatarStorageKey, avatar);
+      } else {
+        localStorage.removeItem(avatarStorageKey);
+      }
+    } catch (e) {
+      console.warn("Failed to persist app state (storage may be full):", e);
+    }
   }, [state]);
 
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>;

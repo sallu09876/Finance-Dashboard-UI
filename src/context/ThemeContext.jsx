@@ -4,11 +4,14 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useLocalStorage("finsight_theme", "dark");
+  const getPreferredTheme = () =>
+    window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  const [theme, setTheme] = useLocalStorage("finsight_theme", getPreferredTheme());
 
   useEffect(() => {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
+    root.style.colorScheme = theme;
   }, [theme]);
 
   return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;

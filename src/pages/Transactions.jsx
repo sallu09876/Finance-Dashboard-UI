@@ -67,6 +67,7 @@ export default function Transactions() {
       />
 
       <TransactionModal
+        key={`${editing?.id || "new"}-${modalOpen ? "open" : "closed"}`}
         open={modalOpen}
         initial={editing}
         onClose={() => setModalOpen(false)}
