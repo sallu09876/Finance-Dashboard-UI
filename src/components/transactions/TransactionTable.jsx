@@ -12,7 +12,63 @@ export default function TransactionTable({ transactions, isAdmin, onSort, onEdit
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
-      <div className="overflow-x-auto">
+      <div className="space-y-2.5 p-2.5 md:hidden">
+        {transactions.map((txn) => (
+          <div key={txn.id} className="rounded-xl border border-slate-200 bg-slate-50 p-2.5 dark:border-slate-700 dark:bg-slate-900/40">
+            <div className="mb-2 flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="truncate text-sm font-medium">{txn.description}</p>
+                <p className="text-xs text-slate-500">{formatDate(txn.date)}</p>
+              </div>
+              <Badge tone={txn.type === "income" ? "emerald" : "rose"}>{txn.type}</Badge>
+            </div>
+            <div className="mb-2.5 flex items-center justify-between text-xs min-[360px]:text-sm">
+              <span className="inline-flex min-w-0 items-center gap-2 truncate text-slate-600 dark:text-slate-300">
+                <span className="h-2 w-2 rounded-full bg-indigo-500" />
+                {txn.category}
+              </span>
+              <p className={`font-semibold ${txn.type === "income" ? "text-emerald-500" : "text-rose-500"}`}>
+                {txn.type === "income" ? "+" : "-"}
+                {formatINR(txn.amount)}
+              </p>
+            </div>
+            {isAdmin ? (
+              <div className="flex items-center gap-2">
+                <button type="button" onClick={() => onEdit(txn)} className="inline-flex items-center rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs dark:border-slate-600">
+                  <Pencil size={14} />
+                </button>
+                {confirmDeleteId === txn.id ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onDelete(txn.id);
+                        setConfirmDeleteId(null);
+                      }}
+                      className="rounded-lg bg-rose-500 px-2.5 py-1.5 text-xs font-medium text-white"
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setConfirmDeleteId(null)}
+                      className="rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs text-slate-500 dark:border-slate-600 dark:text-slate-400"
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button type="button" onClick={() => setConfirmDeleteId(txn.id)} className="inline-flex items-center rounded-lg border border-rose-200 px-2.5 py-1.5 text-xs text-rose-500 dark:border-rose-700/60">
+                    <Trash2 size={14} />
+                  </button>
+                )}
+              </div>
+            ) : null}
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto md:block">
         <table className="w-full min-w-[760px] text-left text-sm">
           <thead className="bg-slate-50 dark:bg-slate-900/40">
             <tr>

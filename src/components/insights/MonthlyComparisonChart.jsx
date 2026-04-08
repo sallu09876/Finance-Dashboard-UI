@@ -21,8 +21,8 @@ export default function MonthlyComparisonChart({ data }) {
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
-            <XAxis dataKey="month" />
-            <YAxis tickFormatter={formatINR} />
+            <XAxis dataKey="month" tick={{ fontSize: 11 }} interval="preserveStartEnd" />
+            <YAxis width={44} tick={{ fontSize: 11 }} tickFormatter={formatINR} />
             <Tooltip formatter={(value) => [formatINR(value), ""]} content={<CustomTooltip />} />
             <Bar dataKey="income" fill="#10b981" radius={[6, 6, 0, 0]} />
             <Bar dataKey="expenses" fill="#f43f5e" radius={[6, 6, 0, 0]} />

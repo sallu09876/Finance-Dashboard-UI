@@ -10,7 +10,7 @@ export default function Layout() {
     <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
       <ToastContainer />
       <Sidebar />
-      <main className="mx-auto max-w-7xl px-4 pb-24 pt-4 lg:ml-64 lg:px-6">
+      <main className="mx-auto max-w-7xl px-3 pb-24 pt-3 sm:px-4 sm:pt-4 lg:ml-64 lg:px-6">
         <Header />
         <AnimatePresence mode="wait">
           <motion.div

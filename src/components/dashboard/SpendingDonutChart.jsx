@@ -33,9 +33,9 @@ export default function SpendingDonutChart({ data }) {
       </div>
       <div className="mt-2 space-y-1">
         {data.map((item, i) => (
-          <div key={item.category} className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ background: colors[i] }} />{item.category}</span>
-            <span>{formatINR(item.amount)} ({total ? ((item.amount / total) * 100).toFixed(1) : 0}%)</span>
+          <div key={item.category} className="flex flex-col gap-1 text-xs min-[360px]:text-sm sm:flex-row sm:items-center sm:justify-between">
+            <span className="flex min-w-0 items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ background: colors[i] }} /><span className="truncate">{item.category}</span></span>
+            <span className="break-all sm:break-normal">{formatINR(item.amount)} ({total ? ((item.amount / total) * 100).toFixed(1) : 0}%)</span>
           </div>
         ))}
       </div>

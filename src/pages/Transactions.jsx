@@ -45,9 +45,9 @@ export default function Transactions() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold">All Transactions</h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="relative" ref={exportDropdownRef}>
             <button onClick={() => setExportOpen((p) => !p)} className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm dark:border-slate-600"><Download size={16} /> Export</button>
             {exportOpen ? (

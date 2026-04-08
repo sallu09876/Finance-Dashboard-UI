@@ -53,11 +53,11 @@ export default function Sidebar() {
           </nav>
         </aside>
       ) : null}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 grid grid-cols-3 border-t border-slate-200 bg-white px-2 py-2 dark:border-slate-700 dark:bg-slate-800 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-30 grid grid-cols-3 border-t border-slate-200 bg-white px-1.5 py-1.5 dark:border-slate-700 dark:bg-slate-800 md:hidden">
         {links.map(({ to, label, icon: Icon }) => (
-          <NavLink key={to} to={to} className={({ isActive }) => `flex flex-col items-center rounded-md py-1 text-xs ${isActive ? "text-indigo-500" : "text-slate-500 dark:text-slate-300"}`}>
-            <Icon size={16} />
-            {label}
+          <NavLink key={to} to={to} className={({ isActive }) => `flex flex-col items-center rounded-md py-1 text-[11px] leading-none ${isActive ? "text-indigo-500" : "text-slate-500 dark:text-slate-300"}`}>
+            <Icon size={15} />
+            <span className="w-full truncate px-1 text-center">{label}</span>
           </NavLink>
         ))}
       </nav>

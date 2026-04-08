@@ -33,8 +33,8 @@ export default function BalanceTrendChart({ data }) {
                 <stop offset="95%" stopColor="#6366f1" stopOpacity={0.02} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="month" />
-            <YAxis tickFormatter={formatINR} />
+            <XAxis dataKey="month" tick={{ fontSize: 11 }} interval="preserveStartEnd" />
+            <YAxis width={44} tick={{ fontSize: 11 }} tickFormatter={formatINR} />
             <Tooltip formatter={(value) => [formatINR(value), ""]} content={<CustomTooltip />} />
             <Area type="monotone" dataKey="balance" stroke="#6366f1" fill="url(#bal)" />
           </AreaChart>

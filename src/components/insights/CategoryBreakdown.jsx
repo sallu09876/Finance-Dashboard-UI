@@ -21,9 +21,9 @@ export default function CategoryBreakdown({ transactions, monthKey, previousMont
           const trendUp = amount > (prevTotals[category] || 0);
           return (
             <div key={category}>
-              <div className="mb-1 flex items-center justify-between text-sm">
-                <span>{category}</span>
-                <span className="flex items-center gap-1">{formatINR(amount)} {trendUp ? <ArrowUpRight size={14} className="text-rose-500" /> : <ArrowDownRight size={14} className="text-emerald-500" />}</span>
+              <div className="mb-1 flex items-center justify-between gap-2 text-xs min-[360px]:text-sm">
+                <span className="truncate">{category}</span>
+                <span className="flex shrink-0 items-center gap-1">{formatINR(amount)} {trendUp ? <ArrowUpRight size={14} className="text-rose-500" /> : <ArrowDownRight size={14} className="text-emerald-500" />}</span>
               </div>
               <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-700">
                 <div className="h-2 rounded-full bg-indigo-500" style={{ width: `${pct}%` }} />
